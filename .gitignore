@@ -1,0 +1,17 @@
+CHATHISTORY.md
+REFS-LOCAL.md
+.codex
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+build/
+dist/
+*.egg-info/
+*.pyc
+*.pyo
+*.log
+config/*.env
+!config/*.env.example

@@ -1,0 +1,4 @@
+# Known downstream consumers of bit-byte-block.
+# Paths are relative to the portfolio root.
+
+repos = []

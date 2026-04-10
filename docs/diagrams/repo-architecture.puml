@@ -1,0 +1,21 @@
+@startuml
+!pragma layout smetana
+title bit-byte-block repository architecture
+
+actor "Local ASICs" as miners
+rectangle "bit-byte-block" {
+  component "CLI\n(src/bit_byte_block/cli.py)" as cli
+  component "Proxy Service\n(src/bit_byte_block/proxy.py)" as proxy
+  component "Config Loader\n(src/bit_byte_block/config.py)" as config
+  component "Status Client\n(src/bit_byte_block/monitor.py)" as monitor
+}
+cloud "Solo CKPool\nsolo.ckpool.org" as ckpool
+
+miners --> proxy : Stratum TCP
+config --> proxy : bind/upstream settings
+cli --> proxy : start service
+cli --> monitor : fetch status
+proxy --> ckpool : relay Stratum TCP
+monitor --> ckpool : GET /pool/pool.status
+
+@enduml
