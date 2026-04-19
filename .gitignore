@@ -15,3 +15,5 @@ dist/
 *.log
 config/*.env
 !config/*.env.example
+config/miners/*.json
+config/miners/*.conf

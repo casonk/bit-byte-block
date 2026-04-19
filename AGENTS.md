@@ -22,7 +22,7 @@ bit-byte-block/
 ├── src/bit_byte_block/
 │   ├── __init__.py                    # Version export
 │   ├── __main__.py                    # python -m entry point
-│   ├── cli.py                         # CLI: proxy / status
+│   ├── cli.py                         # CLI: proxy / status / setup
 │   ├── config.py                      # Env-file loading and runtime config
 │   ├── proxy.py                       # Asyncio Stratum TCP proxy
 │   └── monitor.py                     # solo.ckpool.org pool-status fetcher
@@ -32,9 +32,11 @@ bit-byte-block/
 │   └── test_proxy.py                  # Local relay and failover tests
 ├── config/
 │   ├── bit-byte-block.env.example     # Example runtime configuration
+│   ├── clockwork.toml                 # Clockwork manifest for the proxy systemd service
 │   └── downstream-repos.toml          # Known downstream consumers
 ├── scripts/
-│   └── run_proxy.sh                   # Local service wrapper
+│   ├── run_proxy.sh                   # Local service wrapper (direct launch)
+│   └── setup.sh                       # Device setup wrapper (calls `bit-byte-block setup`)
 └── docs/
     ├── contributor-architecture-blueprint.md
     └── diagrams/
@@ -45,10 +47,18 @@ bit-byte-block/
 ## Quick Start
 
 ```bash
-cp config/bit-byte-block.env.example config/bit-byte-block.env
 python3 -m pip install -e ".[dev]"
-bash scripts/run_proxy.sh
-python3 -m bit_byte_block status
+
+# One-time device setup: installs the proxy as a user systemd service via clockwork
+bash scripts/setup.sh
+
+# Edit the generated env file with your BTC address and worker name, then:
+systemctl --user daemon-reload
+systemctl --user enable --now bit-byte-block-proxy.service
+
+# Ad-hoc commands
+bash scripts/run_proxy.sh          # run proxy directly (no systemd)
+python3 -m bit_byte_block status   # check upstream pool status
 ```
 
 Point ASIC miners at the host running `bit-byte-block`, not directly at
