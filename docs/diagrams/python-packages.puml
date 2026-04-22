@@ -1,0 +1,20 @@
+@startuml packages_bit-byte-block
+set namespaceSeparator none
+top to bottom direction
+skinparam componentStyle rectangle
+rectangle "bit_byte_block\n0 child pkg, 7 modules\n8 python files\nexamples: __main__, cli, config" as bit_byte_block
+rectangle "bit_byte_block.__main__\n1 python file" as bit_byte_block.__main__
+rectangle "bit_byte_block.cli\n1 python file" as bit_byte_block.cli
+rectangle "bit_byte_block.config\n1 python file" as bit_byte_block.config
+rectangle "bit_byte_block.miner\n1 python file" as bit_byte_block.miner
+rectangle "bit_byte_block.monitor\n1 python file" as bit_byte_block.monitor
+rectangle "bit_byte_block.proxy\n1 python file" as bit_byte_block.proxy
+rectangle "bit_byte_block.wallet\n1 python file" as bit_byte_block.wallet
+bit_byte_block.__main__ --> bit_byte_block.cli
+bit_byte_block.cli --> bit_byte_block.config
+bit_byte_block.cli --> bit_byte_block.miner
+bit_byte_block.cli --> bit_byte_block.monitor
+bit_byte_block.cli --> bit_byte_block.proxy
+bit_byte_block.cli --> bit_byte_block.wallet
+bit_byte_block.proxy --> bit_byte_block.config
+@enduml

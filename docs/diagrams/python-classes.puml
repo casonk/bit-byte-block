@@ -1,0 +1,22 @@
+@startuml classes_bit-byte-block
+set namespaceSeparator none
+class "ProxyConfig" as bit_byte_block.config.ProxyConfig {
+  backup_host : str | None
+  backup_port : int
+  bind_host : str
+  bind_port : int
+  connect_timeout : float
+  idle_timeout : float
+  log_level : str
+  status_url : str
+  upstream_host : str
+  upstream_port : int
+}
+class "StratumProxyServer" as bit_byte_block.proxy.StratumProxyServer {
+  config
+  close() -> None
+  serve_forever() -> None
+  start() -> None
+}
+bit_byte_block.config.ProxyConfig --o bit_byte_block.proxy.StratumProxyServer : config
+@enduml
