@@ -1,0 +1,30 @@
+@startuml
+title bit-byte-block Tooling Integrations
+left to right direction
+skinparam shadowing false
+skinparam defaultFontName Monospace
+skinparam componentStyle rectangle
+skinparam linetype ortho
+rectangle ".github/workflows/ci.yml\n6 detected tools" as source_github_workflows_ci_yml #E0F2FE
+rectangle "scripts/miner-setup.sh\n1 detected tool" as source_scripts_miner_setup_sh #E0F2FE
+rectangle "scripts/run_proxy.sh\n0 detected tools" as source_scripts_run_proxy_sh #E0F2FE
+rectangle "scripts/setup.sh\n0 detected tools" as source_scripts_setup_sh #E0F2FE
+cloud "actions/checkout" as tool_actions_checkout #FEF3C7
+cloud "actions/setup-python" as tool_actions_setup_python #FEF3C7
+cloud "bit_byte_block" as tool_bit_byte_block #FEF3C7
+cloud "black" as tool_black #FEF3C7
+cloud "pip" as tool_pip #FEF3C7
+cloud "pytest" as tool_pytest #FEF3C7
+cloud "ruff" as tool_ruff #FEF3C7
+source_github_workflows_ci_yml --> tool_actions_checkout
+source_github_workflows_ci_yml --> tool_actions_setup_python
+source_github_workflows_ci_yml --> tool_black
+source_github_workflows_ci_yml --> tool_pip
+source_github_workflows_ci_yml --> tool_pytest
+source_github_workflows_ci_yml --> tool_ruff
+source_scripts_miner_setup_sh --> tool_bit_byte_block
+note as toolingGraphSummary
+Scanned 4 tooling entrypoints.
+Detected 7 third-party tools.
+end note
+@enduml
