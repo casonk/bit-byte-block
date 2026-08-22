@@ -35,10 +35,34 @@ Regional notes from the same upstream:
 ## Quick Start
 
 ```bash
-python3 -m pip install -e ".[dev]"
-cp config/bit-byte-block.env.example config/bit-byte-block.env
+./bootstrap.sh
 bash scripts/run_proxy.sh
 ```
+
+`bootstrap.sh` creates `.venv`, installs the package in editable mode, verifies
+the `bit-byte-block` command runs, and seeds `config/bit-byte-block.env` from
+the example if you do not already have one. An existing config is never
+overwritten.
+
+Use `./bootstrap.sh --no-dev` to skip the test and lint dependencies, or
+`./bootstrap.sh --venv PATH` to build the environment elsewhere.
+
+<details>
+<summary>Why not <code>pip install -e ".[dev]"</code> directly?</summary>
+
+Since [PEP 668](https://peps.python.org/pep-0668/), Debian, Ubuntu, Arch and
+openSUSE mark the system Python as externally managed, and pip refuses to
+install into it:
+
+```
+error: externally-managed-environment
+```
+
+Fedora still allows it, which is why the old instruction worked on some
+machines and not others. Installing into a virtualenv is correct on all of
+them, and on macOS and Windows too.
+
+</details>
 
 The wrapper script loads `config/bit-byte-block.env` if present, then starts the
 proxy. Point miners at the host running this repo, for example:
