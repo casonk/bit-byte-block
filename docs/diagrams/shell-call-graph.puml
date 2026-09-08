@@ -5,14 +5,23 @@ skinparam shadowing false
 skinparam defaultFontName Monospace
 skinparam componentStyle rectangle
 skinparam linetype ortho
+rectangle "bootstrap.sh\n0 local shell edges\n4 external tools" as shell_bootstrap_sh #DBEAFE
 rectangle "scripts/miner-setup.sh\n0 local shell edges\n1 external tool" as shell_scripts_miner_setup_sh #DBEAFE
 rectangle "scripts/run_proxy.sh\n0 local shell edges\n0 external tools" as shell_scripts_run_proxy_sh #DBEAFE
 rectangle "scripts/setup.sh\n0 local shell edges\n0 external tools" as shell_scripts_setup_sh #DBEAFE
-cloud "bit_byte_block" as tool_bit_byte_block #FEF3C7
-shell_scripts_miner_setup_sh --> tool_bit_byte_block
+cloud "bit-byte-block" as tool_bit_byte_block #FEF3C7
+cloud "bit_byte_block" as tool_bit_byte_block_2 #FEF3C7
+cloud "cat" as tool_cat #FEF3C7
+cloud "cp" as tool_cp #FEF3C7
+cloud "sed" as tool_sed #FEF3C7
+shell_bootstrap_sh --> tool_bit_byte_block
+shell_bootstrap_sh --> tool_cat
+shell_bootstrap_sh --> tool_cp
+shell_bootstrap_sh --> tool_sed
+shell_scripts_miner_setup_sh --> tool_bit_byte_block_2
 note as shellGraphSummary
-Scanned 3 shell scripts.
+Scanned 4 shell scripts.
 Detected 0 local shell edges.
-Detected 1 external tool.
+Detected 5 external tools.
 end note
 @enduml
