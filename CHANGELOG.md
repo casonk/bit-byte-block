@@ -4,6 +4,11 @@
 
 ## 0.1.1
 
+- Fixed the proxy disconnecting every miner every two minutes: the idle
+  timeout was applied to each direction separately, and a miner sends nothing
+  between shares (days apart for a small miner) while the pool keeps sending
+  work. The timeout now applies to the whole session, so a connection closes
+  only when neither side has sent anything for `idle_timeout` seconds.
 - Fixed `bit-byte-block status` failing with "expected 3 JSON objects in pool
   status payload, found 5": solo.ckpool.org now appends client-count and
   Stratum V2 job-declaration sections. The first three sections are still

@@ -72,6 +72,7 @@ install -Dpm 0644 config/bit-byte-block.env.example %{buildroot}%{_sysconfdir}/b
 - Accept the extra sections solo.ckpool.org now appends to its pool status
 - End a relay quietly when a miner or the pool resets the connection
 - Recommend python3-cryptography for wallet generation
+- Apply the idle timeout to the whole session, not each direction
 
 * Sat Oct 17 2026 Cason Konzer <casonk@umich.edu> - 0.1.0-1
 - First package

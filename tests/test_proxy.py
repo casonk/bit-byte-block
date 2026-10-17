@@ -6,7 +6,7 @@ import asyncio
 import unittest
 
 from bit_byte_block.config import ProxyConfig
-from bit_byte_block.proxy import StratumProxyServer, _pipe
+from bit_byte_block.proxy import StratumProxyServer, _Activity, _pipe
 
 
 async def _start_line_server(
@@ -135,3 +135,51 @@ class PipeDisconnectTests(unittest.TestCase):
 
     def test_broken_pipe_while_writing_ends_the_pipe(self) -> None:
         asyncio.run(_pipe(_OneChunkReader(), _BrokenWriter(), 5.0, "upstream->miner"))
+
+
+class _SilentReader:
+    async def read(self, _size: int) -> bytes:
+        await asyncio.sleep(3600)
+        return b""
+
+
+class _NullWriter:
+    def write(self, _data: bytes) -> None:
+        pass
+
+    async def drain(self) -> None:
+        pass
+
+
+class SessionIdleTimeoutTests(unittest.TestCase):
+    """A silent miner stays connected while the pool keeps sending work."""
+
+    def test_silent_direction_waits_while_the_other_is_active(self) -> None:
+        async def scenario() -> float:
+            loop = asyncio.get_running_loop()
+            activity = _Activity()
+
+            async def pool_sends_work() -> None:
+                for _ in range(6):
+                    await asyncio.sleep(0.1)
+                    activity.touch()
+
+            start = loop.time()
+            feeder = asyncio.create_task(pool_sends_work())
+            await _pipe(_SilentReader(), _NullWriter(), 0.25, "miner->upstream", activity)
+            await feeder
+            return loop.time() - start
+
+        elapsed = asyncio.run(scenario())
+        # Work arrived until ~0.6s, so the session lasts until ~0.85s, not 0.25s.
+        self.assertGreater(elapsed, 0.7)
+        self.assertLess(elapsed, 1.5)
+
+    def test_fully_idle_session_still_times_out(self) -> None:
+        async def scenario() -> float:
+            loop = asyncio.get_running_loop()
+            start = loop.time()
+            await _pipe(_SilentReader(), _NullWriter(), 0.2, "miner->upstream", _Activity())
+            return loop.time() - start
+
+        self.assertLess(asyncio.run(scenario()), 0.6)
