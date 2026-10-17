@@ -26,6 +26,11 @@ class PackagingTests(unittest.TestCase):
     def test_spec_version_matches_pyproject(self) -> None:
         self.assertEqual(spec_field("Version"), self.project["version"])
 
+    def test_module_version_matches_pyproject(self) -> None:
+        import bit_byte_block
+
+        self.assertEqual(bit_byte_block.__version__, self.project["version"])
+
     def test_service_runs_the_console_script_with_the_packaged_settings(self) -> None:
         unit = (PACKAGING / "bit-byte-block.service").read_text(encoding="utf-8")
         self.assertIn("bit-byte-block", self.project["scripts"])

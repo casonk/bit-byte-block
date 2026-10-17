@@ -42,3 +42,22 @@ class MonitorTests(unittest.TestCase):
         self.assertEqual(snapshot["summary"]["runtime"], 10)
         self.assertEqual(snapshot["hashrate"]["hashrate1m"], "1P")
         self.assertEqual(snapshot["shares"]["bestshare"], 4)
+
+
+class ExtraSectionTests(unittest.TestCase):
+    """The pool appends sections over time; only the first three are required."""
+
+    def fetch(self, payload: str) -> dict:
+        with patch("bit_byte_block.monitor.urlopen", return_value=FakeResponse(payload)):
+            return fetch_pool_status_snapshot("https://solo.ckpool.org/pool/pool.status")
+
+    def test_extra_sections_are_kept(self) -> None:
+        snapshot = self.fetch(
+            '{"runtime": 10} {"hashrate1m": "1P"} {"bestshare": 4} {"clients": 32} {"sv2jd": true}'
+        )
+        self.assertEqual(snapshot["shares"]["bestshare"], 4)
+        self.assertEqual(snapshot["extra"], [{"clients": 32}, {"sv2jd": True}])
+
+    def test_fewer_than_three_sections_is_an_error(self) -> None:
+        with self.assertRaises(ValueError):
+            self.fetch('{"runtime": 10} {"hashrate1m": "1P"}')
