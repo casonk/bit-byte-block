@@ -20,3 +20,8 @@ change how future sessions work in this repo.
   file, and status client stay aligned when pool settings change.
 - Re-run repo-appropriate validation after changing runtime or CI-facing files
   so formatting and compatibility issues are caught before push.
+- Stratum traffic is lopsided: a miner can stay silent for days between
+  shares while the pool sends work every ~30 s. Any timeout or liveness check
+  must cover the whole session, never one direction, and proxy changes should
+  be tested with a silent client held open for several minutes against the
+  real pool; unit tests with chatty fakes missed a two-minute disconnect loop.
