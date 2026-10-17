@@ -24,21 +24,43 @@ def _set_tcp_nodelay(writer: BufferWriter) -> None:
         LOGGER.debug("unable to enable TCP_NODELAY", exc_info=True)
 
 
+class _Activity:
+    """When either direction of one relayed session last carried data."""
+
+    def __init__(self) -> None:
+        self.last = asyncio.get_running_loop().time()
+
+    def touch(self) -> None:
+        self.last = asyncio.get_running_loop().time()
+
+    def idle_for(self) -> float:
+        return asyncio.get_running_loop().time() - self.last
+
+
 async def _pipe(
     source: BufferReader,
     destination: BufferWriter,
     idle_timeout: float,
     direction: str,
+    activity: _Activity | None = None,
 ) -> None:
+    # The idle timeout covers the whole session, not one direction: a miner
+    # sends nothing between shares, which can be days apart, while the pool
+    # keeps sending work.
+    activity = activity or _Activity()
     while True:
         try:
-            chunk = await asyncio.wait_for(source.read(65536), timeout=idle_timeout)
+            wait = max(idle_timeout - activity.idle_for(), 0.01)
+            chunk = await asyncio.wait_for(source.read(65536), timeout=wait)
             if not chunk:
                 break
+            activity.touch()
             destination.write(chunk)
             await destination.drain()
         except TimeoutError:
-            LOGGER.info("%s idle timeout after %.1fs", direction, idle_timeout)
+            if activity.idle_for() < idle_timeout:
+                continue
+            LOGGER.info("session idle timeout after %.1fs (%s)", idle_timeout, direction)
             break
         except ConnectionError as exc:
             # A miner or pool dropping the connection (reset, broken pipe) is a
@@ -117,12 +139,17 @@ class StratumProxyServer:
 
         LOGGER.info("client %s connected upstream to %s", client_peer, upstream_name)
 
+        activity = _Activity()
         tasks = {
             asyncio.create_task(
-                _pipe(reader, upstream_writer, self.config.idle_timeout, "miner->upstream")
+                _pipe(
+                    reader, upstream_writer, self.config.idle_timeout, "miner->upstream", activity
+                )
             ),
             asyncio.create_task(
-                _pipe(upstream_reader, writer, self.config.idle_timeout, "upstream->miner")
+                _pipe(
+                    upstream_reader, writer, self.config.idle_timeout, "upstream->miner", activity
+                )
             ),
         }
 
