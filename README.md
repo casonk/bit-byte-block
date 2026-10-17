@@ -32,6 +32,20 @@ Regional notes from the same upstream:
 - IPv4-only: `solo4.ckpool.org`
 - IPv6-only: `solo6.ckpool.org`
 
+## Install On Fedora
+
+An RPM with a ready-to-enable systemd service is built from each release:
+
+```bash
+sudo dnf copr enable casonk/tools
+sudo dnf install bit-byte-block
+sudo systemctl enable --now bit-byte-block
+```
+
+Settings live in `/etc/bit-byte-block/bit-byte-block.env`. See
+[packaging/README.md](packaging/README.md) for firewalld, local builds, and
+releases.
+
 ## Quick Start
 
 ```bash

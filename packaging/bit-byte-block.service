@@ -1,0 +1,37 @@
+[Unit]
+Description=bit-byte-block Stratum proxy
+Documentation=https://github.com/casonk/bit-byte-block
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+EnvironmentFile=-/etc/bit-byte-block/bit-byte-block.env
+ExecStart=/usr/bin/bit-byte-block proxy
+Restart=on-failure
+RestartSec=5
+
+# The proxy only relays TCP and logs to the journal; it needs no state on disk.
+DynamicUser=yes
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictAddressFamilies=AF_INET AF_INET6
+RestrictNamespaces=yes
+RestrictRealtime=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+CapabilityBoundingSet=
+
+[Install]
+WantedBy=multi-user.target

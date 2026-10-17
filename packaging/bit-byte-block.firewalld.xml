@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>bit-byte-block</short>
+  <description>Stratum proxy for local Bitcoin miners. Open it only on a trusted LAN or VPN zone.</description>
+  <port protocol="tcp" port="3333"/>
+</service>
