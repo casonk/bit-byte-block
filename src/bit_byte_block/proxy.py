@@ -33,13 +33,18 @@ async def _pipe(
     while True:
         try:
             chunk = await asyncio.wait_for(source.read(65536), timeout=idle_timeout)
+            if not chunk:
+                break
+            destination.write(chunk)
+            await destination.drain()
         except TimeoutError:
             LOGGER.info("%s idle timeout after %.1fs", direction, idle_timeout)
             break
-        if not chunk:
+        except ConnectionError as exc:
+            # A miner or pool dropping the connection (reset, broken pipe) is a
+            # normal way for a session to end, not a proxy failure.
+            LOGGER.info("%s connection closed: %s", direction, exc)
             break
-        destination.write(chunk)
-        await destination.drain()
 
 
 class StratumProxyServer:

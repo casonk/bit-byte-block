@@ -6,7 +6,7 @@ import asyncio
 import unittest
 
 from bit_byte_block.config import ProxyConfig
-from bit_byte_block.proxy import StratumProxyServer
+from bit_byte_block.proxy import StratumProxyServer, _pipe
 
 
 async def _start_line_server(
@@ -107,3 +107,31 @@ class ProxyTests(unittest.IsolatedAsyncioTestCase):
             await asyncio.gather(serve_task, return_exceptions=True)
             backup_server.close()
             await backup_server.wait_closed()
+
+
+class _ResetReader:
+    async def read(self, _size: int) -> bytes:
+        raise ConnectionResetError(104, "Connection reset by peer")
+
+
+class _BrokenWriter:
+    def write(self, _data: bytes) -> None:
+        pass
+
+    async def drain(self) -> None:
+        raise BrokenPipeError(32, "Broken pipe")
+
+
+class _OneChunkReader:
+    async def read(self, _size: int) -> bytes:
+        return b"{}\n"
+
+
+class PipeDisconnectTests(unittest.TestCase):
+    """A dropped connection ends the relay quietly instead of raising."""
+
+    def test_reset_while_reading_ends_the_pipe(self) -> None:
+        asyncio.run(_pipe(_ResetReader(), _BrokenWriter(), 5.0, "miner->upstream"))
+
+    def test_broken_pipe_while_writing_ends_the_pipe(self) -> None:
+        asyncio.run(_pipe(_OneChunkReader(), _BrokenWriter(), 5.0, "upstream->miner"))
