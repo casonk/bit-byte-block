@@ -12,9 +12,11 @@ BuildRequires:  python3-devel
 BuildRequires:  python3-pytest
 BuildRequires:  systemd-rpm-macros
 
-# Runs from the standard library only; KeePassXC storage for `wallet generate
-# --save` is optional and comes from auto-pass when it is installed.
+# The proxy and status commands use the standard library only. `wallet
+# generate` needs cryptography for secp256k1; KeePassXC storage for `--save` is
+# optional and comes from auto-pass when it is installed.
 Requires:       python3 >= 3.11
+Recommends:     python3-cryptography
 %{?systemd_requires}
 
 %description
@@ -69,6 +71,7 @@ install -Dpm 0644 config/bit-byte-block.env.example %{buildroot}%{_sysconfdir}/b
 * Sat Oct 17 2026 Cason Konzer <casonk@umich.edu> - 0.1.1-1
 - Accept the extra sections solo.ckpool.org now appends to its pool status
 - End a relay quietly when a miner or the pool resets the connection
+- Recommend python3-cryptography for wallet generation
 
 * Sat Oct 17 2026 Cason Konzer <casonk@umich.edu> - 0.1.0-1
 - First package

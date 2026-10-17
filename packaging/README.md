@@ -18,8 +18,11 @@ sudo dnf copr enable casonk/tools
 sudo dnf install bit-byte-block
 sudoedit /etc/bit-byte-block/bit-byte-block.env    # optional
 sudo systemctl enable --now bit-byte-block
-# Open the proxy port only in a trusted zone, for example a home LAN:
-sudo firewall-cmd --zone=home --add-service=bit-byte-block --permanent
+# Open the proxy port only in the zone of your trusted LAN or VPN interface.
+# The zone is not always "home": Fedora Workstation puts LAN interfaces in
+# FedoraWorkstation by default.
+firewall-cmd --get-active-zones
+sudo firewall-cmd --zone=ZONE --add-service=bit-byte-block --permanent
 sudo firewall-cmd --reload
 ```
 

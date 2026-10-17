@@ -11,6 +11,9 @@
 - Fixed the proxy logging an "Unhandled exception" traceback whenever a miner
   or the pool reset the connection; a dropped connection now ends that relay
   with one log line.
+- Declared the `cryptography` dependency of `wallet generate` as the `wallet`
+  extra (and `Recommends: python3-cryptography` in the RPM); without it the
+  command now explains what to install instead of failing with a traceback.
 - Added RPM packaging in `packaging/`: a noarch spec built from the release
   tarball, a hardened systemd service (`DynamicUser`, read-only filesystem,
   not enabled by default), settings in `/etc/bit-byte-block`, and a firewalld

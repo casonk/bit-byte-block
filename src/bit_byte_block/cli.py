@@ -202,7 +202,15 @@ def run_wallet(args: Any) -> int:
 
 def _wallet_generate(args: Any) -> int:
     """Generate a new keypair and optionally save to KeePassXC."""
-    from .wallet import generate_keypair
+    try:
+        from .wallet import generate_keypair
+    except ImportError:
+        print(
+            "error: wallet generation needs the cryptography package "
+            "(pip install 'bit-byte-block[wallet]', or python3-cryptography on Fedora)",
+            file=sys.stderr,
+        )
+        return 1
 
     wif, address = generate_keypair()
 
