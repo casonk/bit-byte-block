@@ -1,5 +1,5 @@
 Name:           bit-byte-block
-Version:        0.1.0
+Version:        0.1.1
 Release:        1%{?dist}
 Summary:        Local Bitcoin Stratum proxy and upstream status tooling for solo.ckpool.org
 
@@ -66,5 +66,8 @@ install -Dpm 0644 config/bit-byte-block.env.example %{buildroot}%{_sysconfdir}/b
 %config(noreplace) %{_sysconfdir}/bit-byte-block/bit-byte-block.env
 
 %changelog
+* Sat Oct 17 2026 Cason Konzer <casonk@umich.edu> - 0.1.1-1
+- Accept the extra sections solo.ckpool.org now appends to its pool status
+
 * Sat Oct 17 2026 Cason Konzer <casonk@umich.edu> - 0.1.0-1
 - First package

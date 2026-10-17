@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.1
+
+- Fixed `bit-byte-block status` failing with "expected 3 JSON objects in pool
+  status payload, found 5": solo.ckpool.org now appends client-count and
+  Stratum V2 job-declaration sections. The first three sections are still
+  required; later ones are kept under `extra`.
 - Added RPM packaging in `packaging/`: a noarch spec built from the release
   tarball, a hardened systemd service (`DynamicUser`, read-only filesystem,
   not enabled by default), settings in `/etc/bit-byte-block`, and a firewalld

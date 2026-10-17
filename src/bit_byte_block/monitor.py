@@ -30,10 +30,15 @@ def fetch_pool_status_snapshot(url: str, timeout: float = 10.0) -> dict[str, Any
     with urlopen(url, timeout=timeout) as response:  # noqa: S310 - user-supplied public status URL
         payload = response.read().decode("utf-8")
     sections = parse_json_stream(payload)
-    if len(sections) != 3:
-        raise ValueError(f"expected 3 JSON objects in pool status payload, found {len(sections)}")
+    # The first three sections are stable; the pool appends newer ones (client
+    # counts, Stratum V2 job declaration) that are kept but not interpreted.
+    if len(sections) < 3:
+        raise ValueError(
+            f"expected at least 3 JSON objects in pool status payload, found {len(sections)}"
+        )
     return {
         "summary": sections[0],
         "hashrate": sections[1],
         "shares": sections[2],
+        "extra": sections[3:],
     }
