@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Added RPM packaging in `packaging/`: a noarch spec built from the release
+  tarball, a hardened systemd service (`DynamicUser`, read-only filesystem,
+  not enabled by default), settings in `/etc/bit-byte-block`, and a firewalld
+  service for the proxy port. A test keeps the spec version, service, and port
+  in step with the Python package.
 - Added `bootstrap.sh`, which creates a virtualenv, installs the package in
   editable mode, verifies the `bit-byte-block` command runs, and seeds
   `config/bit-byte-block.env` from the example without overwriting an existing
