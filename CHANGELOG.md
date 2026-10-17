@@ -8,6 +8,9 @@
   status payload, found 5": solo.ckpool.org now appends client-count and
   Stratum V2 job-declaration sections. The first three sections are still
   required; later ones are kept under `extra`.
+- Fixed the proxy logging an "Unhandled exception" traceback whenever a miner
+  or the pool reset the connection; a dropped connection now ends that relay
+  with one log line.
 - Added RPM packaging in `packaging/`: a noarch spec built from the release
   tarball, a hardened systemd service (`DynamicUser`, read-only filesystem,
   not enabled by default), settings in `/etc/bit-byte-block`, and a firewalld
