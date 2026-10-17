@@ -18,6 +18,7 @@ Repository = "https://github.com/casonk/bit-byte-block"
 Changelog = "https://github.com/casonk/bit-byte-block/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
+wallet = ["cryptography"]
 dev = ["pytest", "ruff", "black"]
 
 [project.scripts]
