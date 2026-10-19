@@ -6,27 +6,34 @@ skinparam defaultFontName Monospace
 skinparam componentStyle rectangle
 skinparam linetype ortho
 rectangle ".github/workflows/ci.yml\n2 detected tools" as source_github_workflows_ci_yml #E0F2FE
+rectangle ".github/workflows/python-publish.yml\n3 detected tools" as source_github_workflows_python_publish_yml #E0F2FE
 rectangle ".github/workflows/secret-scan.yml\n1 detected tool" as source_github_workflows_secret_scan_yml #E0F2FE
 rectangle "bootstrap.sh\n3 detected tools" as source_bootstrap_sh #E0F2FE
 rectangle "scripts/miner-setup.sh\n1 detected tool" as source_scripts_miner_setup_sh #E0F2FE
 rectangle "scripts/run_proxy.sh\n0 detected tools" as source_scripts_run_proxy_sh #E0F2FE
 rectangle "scripts/setup.sh\n0 detected tools" as source_scripts_setup_sh #E0F2FE
+cloud "actions/download-artifact" as tool_actions_download_artifact #FEF3C7
 cloud "bit_byte_block" as tool_bit_byte_block #FEF3C7
 cloud "casonk/.github/.github/workflows/install-check.yml" as tool_casonk_github_github_workflows_install_check_yml #FEF3C7
+cloud "casonk/.github/.github/workflows/python-build.yml" as tool_casonk_github_github_workflows_python_build_yml #FEF3C7
 cloud "casonk/.github/.github/workflows/python-ci.yml" as tool_casonk_github_github_workflows_python_ci_yml #FEF3C7
 cloud "casonk/.github/.github/workflows/secret-scan.yml" as tool_casonk_github_github_workflows_secret_scan_yml #FEF3C7
 cloud "cat" as tool_cat #FEF3C7
 cloud "cp" as tool_cp #FEF3C7
+cloud "pypa/gh-action-pypi-publish" as tool_pypa_gh_action_pypi_publish #FEF3C7
 cloud "sed" as tool_sed #FEF3C7
 source_github_workflows_ci_yml --> tool_casonk_github_github_workflows_install_check_yml
 source_github_workflows_ci_yml --> tool_casonk_github_github_workflows_python_ci_yml
+source_github_workflows_python_publish_yml --> tool_actions_download_artifact
+source_github_workflows_python_publish_yml --> tool_casonk_github_github_workflows_python_build_yml
+source_github_workflows_python_publish_yml --> tool_pypa_gh_action_pypi_publish
 source_github_workflows_secret_scan_yml --> tool_casonk_github_github_workflows_secret_scan_yml
 source_bootstrap_sh --> tool_cat
 source_bootstrap_sh --> tool_cp
 source_bootstrap_sh --> tool_sed
 source_scripts_miner_setup_sh --> tool_bit_byte_block
 note as toolingGraphSummary
-Scanned 6 tooling entrypoints.
-Detected 7 third-party tools.
+Scanned 7 tooling entrypoints.
+Detected 10 third-party tools.
 end note
 @enduml

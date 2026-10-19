@@ -18,5 +18,10 @@ class "StratumProxyServer" as bit_byte_block.proxy.StratumProxyServer {
   serve_forever() -> None
   start() -> None
 }
+class "_Activity" as bit_byte_block.proxy._Activity {
+  last
+  idle_for() -> float
+  touch() -> None
+}
 bit_byte_block.config.ProxyConfig --o bit_byte_block.proxy.StratumProxyServer : config
 @enduml
