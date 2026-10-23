@@ -1,4 +1,4 @@
-@startuml classes_bit-byte-block
+@startuml classes_checkout
 set namespaceSeparator none
 class "ProxyConfig" as bit_byte_block.config.ProxyConfig {
   backup_host : str | None
