@@ -7,6 +7,10 @@
 
 ## Public Repositories
 
+- https://github.com/JayDDee/cpuminer-opt — CPU miner cloned by the host setup flow
+- https://github.com/tpruvot/ccminer — NVIDIA CUDA miner cloned by the host setup flow
+- https://github.com/ckolivas/cgminer — OpenCL miner cloned by the host setup flow
+
 ## Public Datasets and APIs
 
 - https://solo.ckpool.org/ — upstream Solo CKPool homepage and published
@@ -18,6 +22,11 @@
 
 - https://solo.ckpool.org/ — upstream guidance for host, port, worker naming,
   and regional pool selection
+- https://rpmfusion.org/Configuration — RPM Fusion package-source reference used by miner installation
+- https://download1.rpmfusion.org/ — RPM Fusion release-package base used by the Fedora miner installer
+- https://developer.nvidia.com/cuda-downloads — CUDA toolkit reference for the NVIDIA miner build path
+- https://developer.download.nvidia.com/compute/cuda/repos/ — NVIDIA CUDA repository base printed by the NVIDIA miner installer
+- https://cryptography.io/ — optional encrypted-wallet export dependency
 
 ## Notes
 
