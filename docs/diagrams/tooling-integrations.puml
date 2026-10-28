@@ -1,5 +1,5 @@
 @startuml
-title bit-byte-block Tooling Integrations
+title checkout Tooling Integrations
 left to right direction
 skinparam shadowing false
 skinparam defaultFontName Monospace
