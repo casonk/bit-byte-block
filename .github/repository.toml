@@ -4,6 +4,7 @@
 [repository]
 # One line shown on GitHub. Keep it free of private repository names and local paths.
 description = "Local Bitcoin Stratum proxy and upstream status tooling for solo.ckpool.org."
+topics = ["bitcoin", "stratum", "mining", "proxy", "python", "tcp"]
 
 [main_branch]
 # Direct commits and pushes to main are refused unless this is true.
