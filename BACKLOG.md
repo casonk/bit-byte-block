@@ -11,6 +11,14 @@ and move them to Done.
 
 ## Pending
 
+- [ ] [manual:2026-11-15] **Investigate running the Stratum proxy in K3s (kind `service`).** Read-only first. The
+  security gain is pinning the pod's outbound traffic to the one mining pool (an FQDN allow-list; today nothing limits
+  where the proxy may connect). Open questions: miners connect to the host's LAN address on 3333 and 4334, so the
+  bridge must listen on the LAN rather than loopback (a socket-activated `systemd-socket-proxyd` to the pod's fixed
+  ClusterIP works, but check how miners behave when the forwarder or pod restarts: they should reconnect without
+  losing shares or being flagged by the pool); upstream failover and the pool-status inspection need DNS and the pool's
+  hosts; and what metrics or logs the host currently provides. Scaffold with traction-control's
+  `scaffold_deployment_modes.py --kind service`; do not cut over while miners are mid-round.
 - [ ] [manual:2026-10-15] **Ask GitHub Support to purge pre-rewrite commits** — this
   repository's published history was rewritten (most recently on 2026-10-15,
   to remove per-commit AI attribution trailers). GitHub keeps serving the old
